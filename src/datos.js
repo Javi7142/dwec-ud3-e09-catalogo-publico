@@ -1,0 +1,103 @@
+// E09 · Catálogo de la tienda. No modifiques este fichero.
+
+/** @import { Producto } from './catalogo.js' */
+
+/** @type {Producto[]} */
+export const productos = [
+  {
+    codigo: 'L01',
+    nombre: 'Cien años de soledad',
+    categoria: 'libros',
+    precio: 19.9,
+    stock: 12,
+    etiquetas: ['novela', 'clásico'],
+  },
+  {
+    codigo: 'L02',
+    nombre: 'El Quijote',
+    categoria: 'libros',
+    precio: 24.5,
+    stock: 0,
+    etiquetas: ['novela', 'clásico', 'oferta'],
+  },
+  {
+    codigo: 'L03',
+    nombre: 'Aprende JavaScript',
+    categoria: 'libros',
+    precio: 32,
+    stock: 5,
+    etiquetas: ['informática'],
+  },
+  {
+    codigo: 'M01',
+    nombre: 'Vinilo Rosalía',
+    categoria: 'música',
+    precio: 29.99,
+    stock: 7,
+    etiquetas: ['vinilo', 'oferta'],
+  },
+  {
+    codigo: 'M02',
+    nombre: 'Ukelele',
+    categoria: 'música',
+    precio: 45,
+    stock: 3,
+    etiquetas: ['instrumento'],
+  },
+  {
+    codigo: 'M03',
+    nombre: 'Órgano infantil',
+    categoria: 'música',
+    precio: 59.9,
+    stock: 2,
+    etiquetas: ['instrumento', 'infantil', 'oferta'],
+  },
+  {
+    codigo: 'P01',
+    nombre: 'Álbum de fotos',
+    categoria: 'papelería',
+    precio: 14.5,
+    stock: 20,
+    etiquetas: ['regalo'],
+  },
+  {
+    codigo: 'P02',
+    nombre: 'bolígrafos (pack 10)',
+    categoria: 'papelería',
+    precio: 4.95,
+    stock: 50,
+    etiquetas: ['oficina', 'oferta'],
+  },
+  {
+    codigo: 'P03',
+    nombre: 'Agenda',
+    categoria: 'papelería',
+    precio: 12,
+    stock: 0,
+    etiquetas: ['oficina', 'regalo'],
+  },
+  {
+    codigo: 'E01',
+    nombre: 'Auriculares',
+    categoria: 'electrónica',
+    precio: 39.95,
+    stock: 8,
+    etiquetas: ['oferta'],
+  },
+  {
+    codigo: 'E02',
+    nombre: 'Ebook',
+    categoria: 'electrónica',
+    precio: 129,
+    stock: 4,
+    etiquetas: ['lectura', 'regalo'],
+  },
+  {
+    codigo: 'E03',
+    nombre: 'Cargador USB',
+    categoria: 'electrónica',
+    precio: 15,
+    stock: 25,
+    etiquetas: ['oficina'],
+  },
+];
