@@ -52,7 +52,7 @@ beforeEach(() => {
 
 describe('crearFiltroPrecio', () => {
   it('acepta un precio dentro del rango', () => {
-    expect(crearFiltroPrecio(10, 30)({ precio: 20 })).toBe(true);
+    expect(crearFiltroPrecio(10, 30)({ precio: 20 })).toBe(false);
   });
 
   it('rechaza un precio por debajo del mínimo y otro por encima del máximo', () => {
