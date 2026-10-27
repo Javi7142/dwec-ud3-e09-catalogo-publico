@@ -134,8 +134,15 @@ export function etiquetasUnicas(productos) {
  * @throws {RangeError} Si el porcentaje no está en (0, 100].
  */
 export function aplicarDescuento(productos, porcentaje, criterio = () => true) {
-  // TODO
-  return [];
+  if (!(porcentaje > 0 && porcentaje <= 100)) {
+    throw new RangeError(`Porcentaje no válido: ${porcentaje}`);
+  }
+  // Copia superficial con spread: cada producto es un objeto nuevo, y solo el precio se recalcula
+  return productos.map((producto) =>
+    criterio(producto)
+      ? { ...producto, precio: Math.round(producto.precio * (1 - porcentaje / 100) * 100) / 100 }
+      : { ...producto },
+  );
 }
 
 /**
@@ -149,6 +156,6 @@ export function aplicarDescuento(productos, porcentaje, criterio = () => true) {
  * // [['Código', 'Nombre', 'Precio'], ['P02', 'Bolis', '4.95']]
  */
 export function tablaPrecios(productos) {
-  // TODO
-  return [];
+  const filas = productos.map(({ codigo, nombre, precio }) => [codigo, nombre, precio.toFixed(2)]);
+  return [['Código', 'Nombre', 'Precio'], ...filas];
 }

@@ -6,6 +6,8 @@ import {
   ordenarPor,
   resumenPorCategoria,
   etiquetasUnicas,
+  aplicarDescuento,
+  tablaPrecios,
 } from '../src/catalogo.js';
 
 /**
@@ -219,5 +221,70 @@ describe('etiquetasUnicas', () => {
       { ...productos[1], etiquetas: ['águila'] },
     ];
     expect(etiquetasUnicas(lista)).toEqual(['águila', 'zorro']);
+  });
+});
+
+describe('aplicarDescuento', () => {
+  it('rebaja solo los productos que cumplen el criterio', () => {
+    const resultado = aplicarDescuento(productos, 20, crearFiltroEtiqueta('oferta'));
+    expect(resultado.map((p) => p.precio)).toEqual([5, 12, 24, 2.5]);
+  });
+
+  it('sin criterio rebaja todos los productos', () => {
+    const resultado = aplicarDescuento(productos, 50);
+    expect(resultado.map((p) => p.precio)).toEqual([2.5, 7.5, 15, 1.25]);
+  });
+
+  it('redondea el precio rebajado a céntimos', () => {
+    const lista = [{ ...productos[0], precio: 19.9 }];
+    // 19.9 * 0.8 = 15.920000000000002 en coma flotante
+    expect(aplicarDescuento(lista, 20)[0].precio).toBe(15.92);
+  });
+
+  it('con un descuento del 100 % deja los precios a 0', () => {
+    expect(aplicarDescuento(productos, 100).map((p) => p.precio)).toEqual([0, 0, 0, 0]);
+  });
+
+  it('no modifica los productos originales', () => {
+    const antes = structuredClone(productos);
+    const resultado = aplicarDescuento(productos, 20);
+    expect(productos).toEqual(antes);
+    expect(resultado[0]).not.toBe(productos[0]);
+  });
+
+  it('devuelve una lista nueva en el mismo orden', () => {
+    const resultado = aplicarDescuento(productos, 10);
+    expect(resultado).not.toBe(productos);
+    expect(resultado.map((p) => p.codigo)).toEqual(productos.map((p) => p.codigo));
+  });
+
+  it('devuelve una lista vacía si no hay productos', () => {
+    expect(aplicarDescuento([], 10)).toEqual([]);
+  });
+
+  it.each([0, -10, 100.5, 150, NaN])('lanza un RangeError si el porcentaje es %s', (porcentaje) => {
+    expect(() => aplicarDescuento(productos, porcentaje)).toThrow(RangeError);
+  });
+
+  it('el mensaje del error indica el porcentaje no válido', () => {
+    expect(() => aplicarDescuento(productos, 150)).toThrow('Porcentaje no válido: 150');
+  });
+});
+
+describe('tablaPrecios', () => {
+  it('empieza con la fila de cabecera y sigue con una fila por producto', () => {
+    expect(tablaPrecios(productos.slice(0, 2))).toEqual([
+      ['Código', 'Nombre', 'Precio'],
+      ['A1', 'Bolígrafo', '5.00'],
+      ['A2', 'Álbum', '15.00'],
+    ]);
+  });
+
+  it('muestra el precio siempre con dos decimales', () => {
+    expect(tablaPrecios([productos[3]])[1][2]).toBe('2.50');
+  });
+
+  it('con una lista vacía devuelve solo la cabecera', () => {
+    expect(tablaPrecios([])).toEqual([['Código', 'Nombre', 'Precio']]);
   });
 });
