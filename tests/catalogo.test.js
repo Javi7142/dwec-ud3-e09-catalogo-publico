@@ -1,5 +1,12 @@
 import { describe, it, expect, beforeEach } from 'vitest';
-import { filtrarPor, crearFiltroPrecio, crearFiltroEtiqueta, ordenarPor } from '../src/catalogo.js';
+import {
+  filtrarPor,
+  crearFiltroPrecio,
+  crearFiltroEtiqueta,
+  ordenarPor,
+  resumenPorCategoria,
+  etiquetasUnicas,
+} from '../src/catalogo.js';
 
 /**
  * Datos de prueba pequeños y propios. Se crean de nuevo para cada test con `beforeEach`.
@@ -154,5 +161,63 @@ describe('ordenarPor', () => {
     // A1 (papelería) y A2 (papelería) comparten categoría: conservan su orden de entrada
     const codigos = ordenarPor(productos, 'categoria').map((p) => p.codigo);
     expect(codigos.indexOf('A1')).toBeLessThan(codigos.indexOf('A2'));
+  });
+});
+
+describe('resumenPorCategoria', () => {
+  it('agrupa por categoría con su número de productos, unidades y valor', () => {
+    expect(resumenPorCategoria(productos)).toEqual([
+      { categoria: 'bebidas', productos: 1, unidades: 20, valor: 50 },
+      { categoria: 'oficina', productos: 1, unidades: 4, valor: 120 },
+      { categoria: 'papelería', productos: 2, unidades: 10, valor: 50 },
+    ]);
+  });
+
+  it('devuelve las categorías en orden alfabético aunque lleguen desordenadas', () => {
+    const categorias = resumenPorCategoria(productos).map((r) => r.categoria);
+    expect(categorias).toEqual(['bebidas', 'oficina', 'papelería']);
+  });
+
+  it('devuelve una lista vacía si no hay productos', () => {
+    expect(resumenPorCategoria([])).toEqual([]);
+  });
+
+  it('redondea el valor a céntimos', () => {
+    // 0.1 * 3 = 0.30000000000000004 en coma flotante
+    const lista = [
+      { codigo: 'X', nombre: 'X', categoria: 'c', precio: 0.1, stock: 3, etiquetas: [] },
+    ];
+    expect(resumenPorCategoria(lista)[0].valor).toBe(0.3);
+  });
+
+  it('cuenta una categoría cuyo stock es 0 con 0 unidades y valor 0', () => {
+    const lista = [
+      { codigo: 'X', nombre: 'X', categoria: 'c', precio: 9, stock: 0, etiquetas: [] },
+    ];
+    expect(resumenPorCategoria(lista)).toEqual([
+      { categoria: 'c', productos: 1, unidades: 0, valor: 0 },
+    ]);
+  });
+});
+
+describe('etiquetasUnicas', () => {
+  it('devuelve las etiquetas sin repetir y en orden alfabético', () => {
+    expect(etiquetasUnicas(productos)).toEqual(['oferta', 'oficina', 'regalo']);
+  });
+
+  it('devuelve una lista vacía si no hay productos', () => {
+    expect(etiquetasUnicas([])).toEqual([]);
+  });
+
+  it('devuelve una lista vacía si ningún producto tiene etiquetas', () => {
+    expect(etiquetasUnicas([productos[3]])).toEqual([]);
+  });
+
+  it('ordena con las reglas del español: «águila» va antes que «zorro»', () => {
+    const lista = [
+      { ...productos[0], etiquetas: ['zorro', 'águila'] },
+      { ...productos[1], etiquetas: ['águila'] },
+    ];
+    expect(etiquetasUnicas(lista)).toEqual(['águila', 'zorro']);
   });
 });

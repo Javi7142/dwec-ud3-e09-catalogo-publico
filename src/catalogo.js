@@ -95,8 +95,20 @@ export function ordenarPor(productos, campo, descendente = false) {
  * @returns {ResumenCategoria[]}
  */
 export function resumenPorCategoria(productos) {
-  // TODO
-  return [];
+  // groupBy agrupa por categoría; cada grupo se reduce a un resumen con sus totales
+  const porCategoria = Object.groupBy(productos, (producto) => producto.categoria);
+  return Object.entries(porCategoria)
+    .map(([categoria, grupo]) => ({
+      categoria,
+      productos: grupo.length,
+      unidades: grupo.reduce((suma, producto) => suma + producto.stock, 0),
+      // Se redondea una sola vez al final, para no acumular errores de coma flotante
+      valor:
+        Math.round(
+          grupo.reduce((suma, producto) => suma + producto.precio * producto.stock, 0) * 100,
+        ) / 100,
+    }))
+    .toSorted((a, b) => a.categoria.localeCompare(b.categoria, 'es'));
 }
 
 /**
@@ -106,8 +118,9 @@ export function resumenPorCategoria(productos) {
  * @returns {string[]}
  */
 export function etiquetasUnicas(productos) {
-  // TODO
-  return [];
+  // flatMap junta las etiquetas de todos los productos; el Set quita las repetidas
+  const etiquetas = new Set(productos.flatMap((producto) => producto.etiquetas));
+  return [...etiquetas].toSorted((a, b) => a.localeCompare(b, 'es'));
 }
 
 /**
