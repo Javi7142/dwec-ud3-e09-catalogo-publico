@@ -40,8 +40,9 @@
  * filtrarPor(productos, crearFiltroPrecio(10, 30), (p) => p.stock > 0);
  */
 export function filtrarPor(productos, ...criterios) {
-  // TODO
-  return [];
+  // filter siempre devuelve una lista nueva (también sin criterios, porque every([]) es true);
+  // every comprueba, dentro del filter, que el producto cumple todos los criterios a la vez
+  return productos.filter((producto) => criterios.every((criterio) => criterio(producto)));
 }
 
 /**
@@ -54,8 +55,8 @@ export function filtrarPor(productos, ...criterios) {
  * crearFiltroPrecio(25)({ precio: 30 }); // true
  */
 export function crearFiltroPrecio(minimo, maximo = Infinity) {
-  // TODO
-  return () => false;
+  // El closure recuerda minimo y maximo; con >= y <= los dos extremos quedan incluidos
+  return (producto) => producto.precio >= minimo && producto.precio <= maximo;
 }
 
 /**
@@ -65,8 +66,7 @@ export function crearFiltroPrecio(minimo, maximo = Infinity) {
  * @returns {Criterio}
  */
 export function crearFiltroEtiqueta(etiqueta) {
-  // TODO
-  return () => false;
+  return (producto) => producto.etiquetas.includes(etiqueta);
 }
 
 /**
