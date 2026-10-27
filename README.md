@@ -1,6 +1,6 @@
 # Catálogo de productos
 
-Repositorio del ejercicio: <https://github.com/Javi7142/dwec-ud3-e09-catalogo> (privado).
+Repositorio del ejercicio: <https://github.com/Javi7142/dwec-ud3-e09-catalogo-publico>.
 
 ## Cómo ejecutarlo
 
@@ -163,13 +163,12 @@ All matched files use Prettier code style!
 
 El workflow está en [`.github/workflows/ci.yml`](.github/workflows/ci.yml): un único trabajo en `ubuntu-latest` con los pasos «Descargar el código», «Instalar Node.js 24 con caché de npm», «Instalar las dependencias» (`npm ci`), «Revisar el código con ESLint», «Comprobar el formato con Prettier» y «Ejecutar los tests».
 
-1. **Ejecución en verde:** <https://github.com/Javi7142/dwec-ud3-e09-catalogo/actions/runs/40566032720> (el repositorio es privado: el enlace solo se abre con una cuenta con acceso).
+1. **Ejecución en verde:** <https://github.com/Javi7142/dwec-ud3-e09-catalogo-publico/actions/runs/40568822781>.
 2. **Captura de la ejecución en verde con sus pasos:**
 
    ![Ejecución en verde](img/ci-verde.jpg)
 
-3. **Ejecución en rojo provocada a propósito:** <https://github.com/Javi7142/dwec-ud3-e09-catalogo/actions/runs/40566162945>. Cambié en `tests/catalogo.test.js` el valor esperado del test `acepta un precio dentro del rango` de `crearFiltroPrecio` (de `true` a `false`) y lo subí. La ejecución falló en el paso **«Ejecutar los tests»** (con `AssertionError: expected true to be false` y `1 failed | 46 passed`); los pasos anteriores, incluidos ESLint y Prettier, salieron en verde. Después deshice el cambio (commit «Deshacer el test roto a propósito…») y la ejecución volvió a verde ([ejecución](https://github.com/Javi7142/dwec-ud3-e09-catalogo/actions/runs/40566484142)).
+3. **Ejecución en rojo provocada a propósito:** <https://github.com/Javi7142/dwec-ud3-e09-catalogo-publico/actions/runs/40568942064>. Cambié en `tests/catalogo.test.js` el valor esperado del test `acepta un precio dentro del rango` de `crearFiltroPrecio` (de `true` a `false`) y lo subí. La ejecución falló en el paso **«Ejecutar los tests»** (con `AssertionError: expected true to be false` y `1 failed | 46 passed`); los pasos anteriores, incluidos ESLint y Prettier, salieron en verde. Después deshice el cambio (commit «Deshacer el test roto a propósito…») y la ejecución volvió a verde ([ejecución](https://github.com/Javi7142/dwec-ud3-e09-catalogo-publico/actions/runs/40569050273)).
 
    ![Ejecución en rojo](img/ci-rojo.jpg)
 
-> Nota: como el repositorio es privado, las capturas están hechas con los datos de cada ejecución (`gh run view`), mostrados con el mismo aspecto de pasos y estado que la pestaña Actions, y no son capturas directas de github.com.
