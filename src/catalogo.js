@@ -79,8 +79,13 @@ export function crearFiltroEtiqueta(etiqueta) {
  * @returns {Producto[]} Lista nueva ordenada.
  */
 export function ordenarPor(productos, campo, descendente = false) {
-  // TODO
-  return [];
+  const sentido = descendente ? -1 : 1;
+  // toSorted ordena una copia: la lista recibida conserva su orden
+  return productos.toSorted((a, b) => {
+    const comparacion =
+      typeof a[campo] === 'string' ? a[campo].localeCompare(b[campo], 'es') : a[campo] - b[campo];
+    return comparacion * sentido;
+  });
 }
 
 /**

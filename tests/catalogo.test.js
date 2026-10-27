@@ -1,5 +1,5 @@
 import { describe, it, expect, beforeEach } from 'vitest';
-import { filtrarPor, crearFiltroPrecio, crearFiltroEtiqueta } from '../src/catalogo.js';
+import { filtrarPor, crearFiltroPrecio, crearFiltroEtiqueta, ordenarPor } from '../src/catalogo.js';
 
 /**
  * Datos de prueba pequeños y propios. Se crean de nuevo para cada test con `beforeEach`.
@@ -113,5 +113,46 @@ describe('filtrarPor', () => {
     const antes = structuredClone(productos);
     filtrarPor(productos, crearFiltroPrecio(10));
     expect(productos).toEqual(antes);
+  });
+});
+
+describe('ordenarPor', () => {
+  it('ordena los números de menor a mayor', () => {
+    expect(ordenarPor(productos, 'precio').map((p) => p.codigo)).toEqual(['C1', 'A1', 'A2', 'B1']);
+  });
+
+  it('ordena de mayor a menor si se indica descendente', () => {
+    expect(ordenarPor(productos, 'precio', true).map((p) => p.codigo)).toEqual([
+      'B1',
+      'A2',
+      'A1',
+      'C1',
+    ]);
+  });
+
+  it('ordena los textos con las reglas del español: la Á va junto a la A, no al final', () => {
+    expect(ordenarPor(productos, 'nombre').map((p) => p.nombre)).toEqual([
+      'Agenda',
+      'Álbum',
+      'Bolígrafo',
+      'Zumo',
+    ]);
+  });
+
+  it('no cambia el orden de la lista original', () => {
+    const codigosAntes = productos.map((p) => p.codigo);
+    const ordenados = ordenarPor(productos, 'precio', true);
+    expect(productos.map((p) => p.codigo)).toEqual(codigosAntes);
+    expect(ordenados).not.toBe(productos);
+  });
+
+  it('devuelve una lista vacía si la lista de entrada está vacía', () => {
+    expect(ordenarPor([], 'nombre')).toEqual([]);
+  });
+
+  it('mantiene el orden relativo de los productos con el mismo valor', () => {
+    // A1 (papelería) y A2 (papelería) comparten categoría: conservan su orden de entrada
+    const codigos = ordenarPor(productos, 'categoria').map((p) => p.codigo);
+    expect(codigos.indexOf('A1')).toBeLessThan(codigos.indexOf('A2'));
   });
 });
